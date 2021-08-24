@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component} from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -27,12 +27,35 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import CryptoTracker from './CryptoTracker';
 import cryptoNames from './Deposits';
 import ConnectButton from "./dapp/ConnectButton";
-import { formatEther, formatUnits, useEthers } from '@ethersproject/units';
+import { formatEther, formatUnits } from '@ethersproject/units';
 import { useWeb3React } from "@web3-react/core"
 import {Home, active, account, library, connector, activate, deactivate, connect, disconnect } from "./index";
 import { injected } from "./connector"
-import MApp from "../../App";
-import Web3 from 'web3';
+
+class MMApp extends Component {
+  componentWillMount() {
+    this.loadBlockchainData()
+  }
+
+  async loadBlockchainData() {
+    const web3 = new Web3(Web3.givenProvider || "https://rinkeby.infura.io/v3/acda238b8d434de2840394eea3ad6df3")
+    const accounts = await web3.eth.getAccounts()
+    this.setState({ account: accounts[0] })
+  }
+
+  constructor(props) {
+    super(props)
+    this.state = { account: '' }
+  }
+
+  render() {
+    return (
+      <div className="container">
+        <p>Your account: {this.state.account}</p>
+      </div>
+    );
+  }
+}
 
 function Copyright() {
   return (
@@ -127,7 +150,9 @@ const useStyles = makeStyles((theme) => ({
     height: 575,
   },
 }));
+
 const queryClient = new QueryClient();
+
 export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
@@ -138,6 +163,8 @@ export default function Dashboard() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  
+    
 
   return (
     <div className={classes.root}>
@@ -158,6 +185,7 @@ export default function Dashboard() {
           </Typography>
 
           <IconButton color="inherit">
+
             
             {/** 
           <div className="flex flex-col items-center justify-center">
@@ -166,8 +194,8 @@ export default function Dashboard() {
             <button onClick={disconnect} className="py-2 mt-20 mb-4 text-lg font-bold text-white rounded-lg w-56 bg-blue-600 hover:bg-blue-800">Disconnect</button>
             </div>
             */}
-            <Mapp />
 
+          
           </IconButton>
 
         </Toolbar>
@@ -223,3 +251,4 @@ export default function Dashboard() {
     </div>
   );
 }
+
