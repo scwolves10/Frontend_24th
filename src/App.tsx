@@ -35,10 +35,6 @@ const App = () => {
 export default App;
 
 
-import React, { Component } from 'react'
-import Web3 from 'web3'
-import './App.css'
-
 export class MMApp extends Component {
   componentWillMount() {
     this.loadBlockchainData()
@@ -58,7 +54,6 @@ export class MMApp extends Component {
   render() {
     return (
       <div className="container">
-        <h1l>Hello, World!</h1>
         <p>Your account: {this.state.account}</p>
       </div>
     );
